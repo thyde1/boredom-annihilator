@@ -10,6 +10,9 @@ var builder = Host.CreateEmptyApplicationBuilder(new HostApplicationBuilderSetti
 
 // don't forget to add your api key / endpoint / deployment name/and model id ( deployments found here: https://oai.azure.com/ )
 builder.Services
+    //.AddAzureOpenAIAudioToText()
+    //.AddAzureOpenAITextEmbeddingGeneration()
+    //.AddAzureOpenAITextToImage()
     .AddAzureOpenAIChatCompletion(
         "",
         "",
