@@ -2,13 +2,13 @@
 using Microsoft.SemanticKernel;
 using System.ComponentModel;
 
-public class WeatherPlugin
+public class TripAdvisorPlugin
 {
-    public WeatherPlugin()
+    public TripAdvisorPlugin()
     {
     }
 
-    [KernelFunction("get_weather")]
+    [KernelFunction("get_locations")]
     [Description("Get the current and future weather forecast")]
     [return: Description("The weather data.")]
     public string GetWeather(string location)

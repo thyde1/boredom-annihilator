@@ -2,6 +2,13 @@
 
 public static class ChatPrinter
 {
+    private static void WriteColor(string text, ConsoleColor color)
+    {
+        Console.ForegroundColor = color;
+        Console.WriteLine(text);
+        Console.ForegroundColor = ConsoleColor.Gray;
+    }
+
     public static void PrintPrompt()
     {
         Console.ForegroundColor = ConsoleColor.Yellow;
@@ -20,8 +27,11 @@ public static class ChatPrinter
 
     public static void PrintExclamation(string text)
     {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine(text);
-        Console.ForegroundColor = ConsoleColor.Gray;
+        WriteColor(text, ConsoleColor.Red);
+    }
+
+    public static void PrintDependency(string text)
+    {
+        WriteColor(text, ConsoleColor.Cyan);
     }
 }

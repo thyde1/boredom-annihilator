@@ -21,18 +21,18 @@ var kernelBuilder = Kernel.CreateBuilder().AddAzureOpenAIChatCompletion("gpt4o",
 kernelBuilder.Plugins.AddFromType<WeatherPlugin>();
 var kernel = kernelBuilder.Build();
 
+OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new()
+{
+    ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
+    
+};
+
 var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
 
 Console.ForegroundColor = ConsoleColor.Gray;
 
 Console.WriteLine("How can I help you today?");
 var userInput = ChatPrinter.GetUserInput();
-
-
-OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new()
-{
-    ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions
-};
 
 var history = new ChatHistory();
 
