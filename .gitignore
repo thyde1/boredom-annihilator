@@ -10,7 +10,7 @@
 *.userosscache
 *.sln.docstates
 .idea/
-
+.vs/
 # User-specific files (Mono Auto Generated)
 mono_crash.*
 
