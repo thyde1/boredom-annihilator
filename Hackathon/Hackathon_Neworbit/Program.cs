@@ -79,7 +79,7 @@ async Task<string> GetChatCompletion(IChatCompletionService chatCompletionServic
         catch (HttpOperationException e)
         {
             var delaySeconds = int.Parse(e.Message.Split("after ")[1].Split(" seconds")[0]);
-            Console.WriteLine($"Throttled. Waiting ({delaySeconds} seconds)...");
+            ChatPrinter.PrintInfo($"Throttled. Waiting ({delaySeconds} seconds)...");
             await Task.Delay(delaySeconds * 1000);
         }
     }

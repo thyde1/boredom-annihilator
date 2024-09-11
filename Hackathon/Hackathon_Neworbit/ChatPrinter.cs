@@ -34,4 +34,9 @@ public static class ChatPrinter
     {
         WriteColor(text, ConsoleColor.Cyan);
     }
+
+    public static void PrintInfo(string text)
+    {
+        WriteColor(text, ConsoleColor.DarkGray);
+    }
 }
