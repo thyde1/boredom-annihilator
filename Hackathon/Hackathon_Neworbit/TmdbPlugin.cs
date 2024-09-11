@@ -1,4 +1,5 @@
-﻿using Microsoft.SemanticKernel;
+﻿using Hackathon_Neworbit.Tmdb;
+using Microsoft.SemanticKernel;
 using System.ComponentModel;
 using TMDbLib.Client;
 using TMDbLib.Objects.General;
@@ -27,24 +28,18 @@ public class TmdbPlugin
     }
 
     [KernelFunction("get_movies_in_genres")]
-    [Description("Get list of movies in in the given genres")]
+    [Description("Get list of movies in in the given genres. The genres will be ORed")]
     [return: Description("list of movies")]
-    public async Task<List<SearchMovie>> GetMoviesInGenre(int[] genreIds)
+    public async Task<List<MovieDto>> GetMoviesInGenre(int[] genreIds)
     {
         ChatPrinter.PrintDependency($"- Calling get movies in genres lookup {string.Join(", ", genreIds)} -");
         var movies = await tmdbClient.DiscoverMoviesAsync()
             .IncludeWithAnyOfGenre(genreIds)
             .Query();
-        return movies.Results;
-    }
-
-    [KernelFunction("get_movie")]
-    [Description("Get movie details by id")]
-    [return: Description("Movie data")]
-    public async Task<Movie?> GetMovie(int movieId)
-    {
-        ChatPrinter.PrintDependency($"- Calling movie by id lookup - {movieId} -");
-        var movie = await tmdbClient.GetMovieAsync(movieId);
-        return movie;
+            return movies.Results.Select(m => new MovieDto
+            {
+                Title = m.Title,
+                Overview = m.Overview
+            }).ToList();
     }
 }
