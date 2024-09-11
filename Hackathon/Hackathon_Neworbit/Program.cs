@@ -1,4 +1,5 @@
-﻿using Hackathon_Neworbit;
+﻿using Azure.Core.Cryptography;
+using Hackathon_Neworbit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,6 +19,8 @@ Console.WriteLine("Boredom annihilation in progress...");
 
 var configuration = application.Services.GetRequiredService<IConfiguration>();
 var kernelBuilder = Kernel.CreateBuilder().AddAzureOpenAIChatCompletion("gpt4o", "https://boredom-euw-ai.openai.azure.com/", configuration.GetValue<string>("openaiKey")!);
+kernelBuilder.Plugins.Services.AddHttpClient();
+kernelBuilder.Plugins.Services.AddSingleton<IConfiguration>(configuration);
 kernelBuilder.Plugins.AddFromType<WeatherPlugin>();
 var kernel = kernelBuilder.Build();
 
