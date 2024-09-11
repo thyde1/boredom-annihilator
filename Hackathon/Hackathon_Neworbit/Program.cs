@@ -15,7 +15,7 @@ builder.Configuration.AddUserSecrets("c0515972-21aa-4f00-af01-2e17a542c4e1");
 var application = builder.Build();
 var configuration = application.Services.GetRequiredService<IConfiguration>();
 
-Console.WriteLine("BOREDOM ANNIHILATOR (v1)\n");
+Console.WriteLine("BOREDOM ANNIHILATOR (v3.0)\n");
 
 var kernelBuilder = Kernel.CreateBuilder()
     .AddAzureOpenAIChatCompletion("gpt4o", "https://boredom-euw-ai.openai.azure.com/", configuration.GetValue<string>("openaiKey")!);
