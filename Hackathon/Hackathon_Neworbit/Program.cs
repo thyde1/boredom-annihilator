@@ -16,10 +16,9 @@ Console.WriteLine("BOREDOM ANNIHIALATOR (v1)\n");
 Console.WriteLine("Boredom annihilation in progress...");
 
 var configuration = application.Services.GetRequiredService<IConfiguration>();
-
-var kernel = Kernel.
-    CreateBuilder().AddAzureOpenAIChatCompletion("gpt4o", "https://boredom-euw-ai.openai.azure.com/", configuration.GetValue<string>("openaiKey")!)
-    .Build();
+var kernelBuilder = Kernel.CreateBuilder().AddAzureOpenAIChatCompletion("gpt4o", "https://boredom-euw-ai.openai.azure.com/", configuration.GetValue<string>("openaiKey")!);
+kernelBuilder.Plugins.AddFromType<WeatherPlugin>();
+var kernel = kernelBuilder.Build();
 
 var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
 
