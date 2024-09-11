@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Hackathon_Neworbit</RootNamespace>
+        <UserSecretsId>c0515972-21aa-4f00-af01-2e17a542c4e1</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
