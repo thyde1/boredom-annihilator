@@ -14,6 +14,7 @@
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
       <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
       <PackageReference Include="Microsoft.SemanticKernel" Version="1.18.1-rc" />
+      <PackageReference Include="TMDbLib" Version="2.2.0" />
     </ItemGroup>
 
 </Project>

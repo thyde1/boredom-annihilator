@@ -17,8 +17,8 @@ public class WeatherPlugin
     }
 
     [KernelFunction("get_weather")]
-    [Description("Get the current and future weather forecast")]
-    [return: Description(GetWeatherReturnDescription)]
+    [Description("5 day forecast is available at any location on the globe. It includes weather forecast data with 3-hour step. You can search weather forecast for 5 days with data every 3 hours by geographic coordinates.")]
+    [return: Description("Weather data")]
     public async Task<string> GetWeather(float lat, float lng)
     {
         ChatPrinter.PrintDependency($"- Calling weather lookup {lat}, {lng} -");
