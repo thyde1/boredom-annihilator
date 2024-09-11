@@ -15,8 +15,6 @@ var application = builder.Build();
 
 Console.WriteLine("BOREDOM ANNIHIALATOR (v1)\n");
 
-Console.WriteLine("Boredom annihilation in progress...");
-
 var configuration = application.Services.GetRequiredService<IConfiguration>();
 var kernelBuilder = Kernel.CreateBuilder().AddAzureOpenAIChatCompletion("gpt4o", "https://boredom-euw-ai.openai.azure.com/", configuration.GetValue<string>("openaiKey")!);
 kernelBuilder.Plugins.Services.AddHttpClient();
@@ -50,6 +48,9 @@ history.AddUserMessage(userInput!);
 while (true)
 {
     var completions = await chatCompletionService.GetChatMessageContentsAsync(history, executionSettings: openAIPromptExecutionSettings, kernel: kernel);
+
+    Console.WriteLine("Boredom annihilation in progress...");
+
     var assistantResponse = completions.Last();
     if (assistantResponse.InnerContent.ToString() == SuccessMessage) {
         ChatPrinter.PrintExclamation(SuccessMessage);
