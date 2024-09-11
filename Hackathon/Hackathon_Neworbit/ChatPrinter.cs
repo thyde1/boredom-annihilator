@@ -17,4 +17,11 @@ public static class ChatPrinter
         Console.ForegroundColor = ConsoleColor.Gray;
         return input;
     }
+
+    public static void PrintExclamation(string text)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine(text);
+        Console.ForegroundColor = ConsoleColor.Gray;
+    }
 }
