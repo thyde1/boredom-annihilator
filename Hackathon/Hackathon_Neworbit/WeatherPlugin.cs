@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.SemanticKernel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Net.Http.Json;
 
 public class WeatherPlugin
 {
@@ -31,8 +32,9 @@ public class WeatherPlugin
 
         var response = await httpClient.GetAsync(uriBuilder.Uri);
 
-        var data = await response.Content.ReadAsStringAsync();
-        return data;
+        var data = await response.Content.ReadFromJsonAsync<WeatherModel>();
+        var weather = data.list.First().weather.First().main;
+        return weather;
     }
 
     private const string GetWeatherReturnDescription = @"JSON format API response fields
