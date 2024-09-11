@@ -1,6 +1,5 @@
 ﻿using Microsoft.SemanticKernel;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 
 public class WeatherPlugin
 {
@@ -13,6 +12,9 @@ public class WeatherPlugin
     [return: Description("The weather data.")]
     public string GetWeather(string location)
     {
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("- Calling weather lookup -");
+        Console.ForegroundColor = ConsoleColor.Gray;
         return "The weather in " + location + " is sunny.";
     }
 }
