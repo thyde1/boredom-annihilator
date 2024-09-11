@@ -15,8 +15,6 @@ var application = builder.Build();
 
 Console.WriteLine("BOREDOM ANNIHILATOR (v1)\n");
 
-Console.WriteLine("Boredom annihilation in progress...");
-
 var configuration = application.Services.GetRequiredService<IConfiguration>();
 var kernelBuilder = Kernel.CreateBuilder().AddAzureOpenAIChatCompletion("gpt4o", "https://boredom-euw-ai.openai.azure.com/", configuration.GetValue<string>("openaiKey")!);
 kernelBuilder.Plugins.Services.AddHttpClient();
@@ -71,8 +69,9 @@ async Task<string> GetChatCompletion(IChatCompletionService chatCompletionServic
         }
         catch (HttpOperationException e)
         {
-            await Task.Delay(1000);
-            Console.WriteLine("...");
+            var delaySeconds = int.Parse(e.Message.Split("after ")[1].Split(" seconds")[0]);
+            Console.WriteLine($"Throttled. Waiting ({delaySeconds} seconds)...");
+            await Task.Delay(delaySeconds * 1000);
         }
     }
 
