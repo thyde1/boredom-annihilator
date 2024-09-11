@@ -13,7 +13,7 @@ var builder = new HostApplicationBuilder();
 builder.Configuration.AddUserSecrets("c0515972-21aa-4f00-af01-2e17a542c4e1");
 var application = builder.Build();
 
-Console.WriteLine("BOREDOM ANNIHIALATOR (v1)\n");
+Console.WriteLine("BOREDOM ANNIHILATOR (v1)\n");
 
 Console.WriteLine("Boredom annihilation in progress...");
 
@@ -22,12 +22,12 @@ var kernelBuilder = Kernel.CreateBuilder().AddAzureOpenAIChatCompletion("gpt4o",
 kernelBuilder.Plugins.Services.AddHttpClient();
 kernelBuilder.Plugins.Services.AddSingleton<IConfiguration>(configuration);
 kernelBuilder.Plugins.AddFromType<WeatherPlugin>();
+kernelBuilder.Plugins.AddFromType<GeoApifyPlugin>();
 var kernel = kernelBuilder.Build();
 
 OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new()
 {
     ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions,
-    
 };
 
 var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
@@ -49,14 +49,33 @@ history.AddUserMessage(userInput!);
 
 while (true)
 {
-    var completions = await chatCompletionService.GetChatMessageContentsAsync(history, executionSettings: openAIPromptExecutionSettings, kernel: kernel);
-    var assistantResponse = completions.Last();
-    if (assistantResponse.InnerContent.ToString() == SuccessMessage) {
+    var response = await GetChatCompletion(chatCompletionService, history);
+    if (response == SuccessMessage) {
         ChatPrinter.PrintExclamation(SuccessMessage);
         break;
     }
-    Console.WriteLine(completions.Last());
+    Console.WriteLine(response);
     var newUserInput = ChatPrinter.GetUserInput();
-    history.AddAssistantMessage(assistantResponse.InnerContent!.ToString()!);
+    history.AddAssistantMessage(response);
     history.AddUserMessage(newUserInput!);
+}
+
+async Task<string> GetChatCompletion(IChatCompletionService chatCompletionService, ChatHistory history)
+{
+    IReadOnlyList<ChatMessageContent> completions = null;
+    while (completions == null)
+    {
+        try
+        {
+            completions = await chatCompletionService.GetChatMessageContentsAsync(history, executionSettings: openAIPromptExecutionSettings, kernel: kernel);
+        }
+        catch (HttpOperationException e)
+        {
+            await Task.Delay(1000);
+            Console.WriteLine("...");
+        }
+    }
+
+    var assistantResponse = completions.Last();
+    return assistantResponse.InnerContent.ToString();
 }
