@@ -1,6 +1,7 @@
 ﻿using Microsoft.SemanticKernel;
 using System.ComponentModel;
 using TMDbLib.Client;
+using TMDbLib.Objects.General;
 using TMDbLib.Objects.Movies;
 using TMDbLib.Objects.Search;
 
@@ -15,24 +16,26 @@ public class TmdbPlugin
         this.tmdbClient = tmdbClient;
     }
 
-    [KernelFunction("get_collection")]
-    [Description("Search for movie collection metadata")]
-    [return: Description("Closest matching movie collection")]
-    public async Task<SearchCollection?> SearchMovieCollection(string searchTerm)
+    [KernelFunction("get_genres")]
+    [Description("Get list of movie genres")]
+    [return: Description("list of movie genres")]
+    public async Task<List<Genre>> GetMovieGenres()
     {
-        ChatPrinter.PrintDependency("- Calling movie collection lookup -");
-        var collections = await tmdbClient.SearchCollectionAsync(searchTerm);
-        return collections.Results.First();
+        ChatPrinter.PrintDependency("- Calling get movie genres lookup -");
+        var genres = await tmdbClient.GetMovieGenresAsync();
+        return genres;
     }
 
-    [KernelFunction("get_movies_in_collection")]
-    [Description("List movies in a collection")]
-    [return: Description("the list of movies")]
-    public async Task<List<SearchMovie>> GetMoviesInCollection(int collectionId)
+    [KernelFunction("get_movies_in_genres")]
+    [Description("Get list of movies in in the given genres")]
+    [return: Description("list of movies")]
+    public async Task<List<SearchMovie>> GetMoviesInGenre(int[] genreIds)
     {
-        ChatPrinter.PrintDependency("- Calling movies in collection lookup -");
-        var collection = await tmdbClient.GetCollectionAsync(collectionId);
-        return collection.Parts;
+        ChatPrinter.PrintDependency($"- Calling get movies in genres lookup {string.Join(", ", genreIds)} -");
+        var movies = await tmdbClient.DiscoverMoviesAsync()
+            .IncludeWithAnyOfGenre(genreIds)
+            .Query();
+        return movies.Results;
     }
 
     [KernelFunction("get_movie")]
@@ -40,7 +43,7 @@ public class TmdbPlugin
     [return: Description("Movie data")]
     public async Task<Movie?> GetMovie(int movieId)
     {
-        ChatPrinter.PrintDependency("- Calling movie lookup -");
+        ChatPrinter.PrintDependency($"- Calling movie by id lookup - {movieId} -");
         var movie = await tmdbClient.GetMovieAsync(movieId);
         return movie;
     }
